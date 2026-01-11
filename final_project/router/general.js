@@ -72,21 +72,31 @@ public_users.get('/author/:author', async (req, res) => {
 // Get all books based on title
 public_users.get('/title/:title', async (req, res) => {
   try {
-    const title = req.params.title;
+    const title = req.params.title.toLowerCase();
+    const result = [];
 
-    const filteredTitle = await Promise.resolve(Object.values(books).find(
-      book => book.title?.toLocaleLowerCase() === title.toLocaleLowerCase()
-    ));
+    for (let isbn in books) {
+      const book = books[isbn];
+      if (book.title && book.title.toLowerCase() === title) {
+        result.push({
+          isbn: isbn,
+          author: book.author,
+          title: book.title,
+          reviews: book.reviews
+        });
+      }
+    }
 
-    if (!filteredTitle) {
+    if (result.length === 0) {
       return res.status(404).json({ "message": `No books found for title: ${title}` });
     }
 
-    return res.status(200).json(filteredTitle);
+    return res.status(200).json(result);
   } catch (err) {
-    return res.status(500).json({ message: "Internal Server Error" })
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
 
 //  Get book review
 public_users.get('/review/:isbn', function (req, res) {
