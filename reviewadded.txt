@@ -1,0 +1,4 @@
+curl -b cookie.txt -X PUT \                                                  ─╯
+"http://localhost:3000/customer/auth/review/1?review=This%20is%20a%20good%20book.%20I%27m%20happy%20can%20read%20the%20book."
+
+{"message":"Review from nisa added successfully"}%    
